@@ -43,9 +43,18 @@ for outcome in outcomes:
         for j, date_range in enumerate(date_bins):
             
             count[i, j] = np.sqrt(df.loc[df['Age Range'].isin([age_range]) & df['date_bin'].isin([date_range]),outcome].sum())
-            
-    hm = age_ax.imshow(count, cmap="inferno", origin="lower", interpolation="nearest", aspect="auto")
     
+    apply_num = False
+    if apply_num == True:
+        cmap_key = 'bone'
+        for i in range(i+1):
+            for j in range(j+1):
+                age_ax.annotate(f'{count[i,j]**2:.0f}',(j,i),color='orangered',rotation=90,ha='center',va='center')
+    else:
+        cmap_key = 'inferno'
+
+    hm = age_ax.imshow(count, cmap=cmap_key, origin="lower", interpolation="nearest", aspect="auto")
+
     age_ax.set_yticks(range(i+1))
     age_ax.set_yticklabels(age_ranges)
     
@@ -62,8 +71,8 @@ for outcome in outcomes:
                  "\n'Onset Date' used for visualization" +\
                  "\nData as of 2020-07-14 from https://coronavirus.ohio.gov/static/COVIDSummaryData.csv" +\
                  "\nCreated by: Scott Schriner @schrinetime (Credit: Marc Bevand @zorinaq)")
-    
+           
     age_fig.tight_layout(rect=[0,.16,1,.9])
-    age_fig.savefig(f'OH_COVID_{outcome_name}_heatmap.png')
+    age_fig.savefig(f'OH_COVID_{outcome_name}_heatmap_num{apply_num}.png')
 
 
